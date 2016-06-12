@@ -2,7 +2,7 @@
 # @Author: sahildua2305
 # @Date:   2016-06-13 03:08:08
 # @Last Modified by:   Sahil Dua
-# @Last Modified time: 2016-06-13 03:50:59
+# @Last Modified time: 2016-06-13 04:11:03
 
 import requests, json
 from movie import Movie
@@ -18,12 +18,15 @@ def get_poster_url(title):
     's': title
   })
 
-  r = json.loads(response.content)['Search']
-
-  if len(r) > 0 and r[0]['Poster'] != "N/A":
-    return r[0]['Poster']
+  try:
+    r = json.loads(response.content)['Search']
+  except KeyError:
+    return title, "https://www.makeupgeek.com/wp-content/themes/makeupgeek-v4/images/placeholder-square.svg"
   else:
-    return "https://www.makeupgeek.com/wp-content/themes/makeupgeek-v4/images/placeholder-square.svg"
+    if len(r) > 0 and r[0]['Poster'] != "N/A":
+      return r[0]['Title'], r[0]['Poster']
+    else:
+      return title, "https://www.makeupgeek.com/wp-content/themes/makeupgeek-v4/images/placeholder-square.svg"
 
 
 """
@@ -50,9 +53,14 @@ except ValueError:  # If a non integer input is entered, catch the corresponding
 
 i = 0
 while i < n:
-  title = raw_input("Please enter movie's title: ")
-  poster_url = get_poster_url(title)  # Fetch poster URL
+  raw_title = raw_input("Please enter movie's title: ")
+  title, poster_url = get_poster_url(raw_title)  # Fetch poster URL
   trailer_url = get_trailer_url(title)  # Fetch trailer URL
+
+  print "Title:", title
+  print "Poster URL:", poster_url
+  print "Trailer URL:", trailer_url
+  print
 
   # Instantiate the Movie class and add the object to `movies_list`
   movies_list.append(Movie(title, poster_url, trailer_url))
