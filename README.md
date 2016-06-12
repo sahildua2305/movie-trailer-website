@@ -16,3 +16,12 @@ Run app.py
 python app.py
 ```
 
+## Demo
+
+Running the app from command line
+
+![Screenshot for Command line](/screenshots/command-line.png?raw=true "Command line")
+
+Web application demo
+
+![Screenshot for demo](/screenshots/demo.png?raw=true "Demo")
